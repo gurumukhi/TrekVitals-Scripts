@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Generate table from JSON</title>
+    </head>
+
+    <body>
+        <script>
+            const generate = () => {
+                const jsonTableStr = document.querySelector("#json").value;
+                const jsonTable = JSON.parse(jsonTableStr.substr("batchJson=".length, jsonTableStr.length));
+                const trekkers = jsonTable[0].trekkers.map((a, index) => ({
+                    SrNo: index + 1,
+                    TrekkerName: a.name,
+                    City: a.city,
+                    Phone: a.phone_number,
+                }));
+
+                function generateTableHead(table, data) {
+                    table.style.borderCollapse = "collapse";
+                    table.style.borderSpacing = "0";
+                    let thead = table.createTHead();
+                    let row = thead.insertRow();
+                    for (let key of data) {
+                        let th = document.createElement("th");
+                        let text = document.createTextNode(key);
+                        th.appendChild(text);
+                        row.appendChild(th);
+                    }
+                }
+
+                function generateTable(table, data) {
+                    for (let element of data) {
+                        let row = table.insertRow();
+                        for (key in element) {
+                            let cell = row.insertCell();
+                            let text = document.createTextNode(element[key]);
+                            cell.appendChild(text);
+                            cell.style.border = "1px solid gray";
+                            cell.style.padding = "10px";
+                            cell.style.margin = "0px";
+                        }
+                    }
+                }
+
+                let table = document.querySelector("table");
+                let data = Object.keys(trekkers[0]);
+                generateTableHead(table, data);
+                generateTable(table, trekkers);
+
+                document.querySelector("#input").style.display = "none";
+            };
+        </script>
+
+        <div id="input">
+            Enter JSON data to generate printable table:
+            <br />
+            <textarea id="json" name="json" rows="4" cols="50" placeholder="Enter JSON data here to generate printable table"> </textarea>
+            <button onClick="generate()">Generate Printable Table</button>
+        </div>
+        <br />
+        <br />
+        <table>
+            <!-- here goes our data! -->
+        </table>
+    </body>
+</html>
