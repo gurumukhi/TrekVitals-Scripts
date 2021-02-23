@@ -13,6 +13,7 @@
             const generate = () => {
                 try {
                     const jsonTableStr = document.querySelector("#json").value.trim();
+                    // remove "batchJson=" if required below
                     const jsonTable = JSON.parse(jsonTableStr.substr("batchJson=".length, jsonTableStr.length));
                     const trekkers = jsonTable[0].trekkers.map((a, index) => ({
                         SrNo: index + 1,
@@ -67,7 +68,7 @@
         <div id="input">
             Enter JSON data to generate printable table:
             <br />
-            <textarea id="json" name="json" rows="4" cols="50" placeholder="Enter JSON data here to generate printable table"></textarea>
+            <textarea id="json" name="json" rows="4" cols="50" placeholder="Enter JSON data here to generate printable table."></textarea>
             <br />
             <br />
             <button onClick="generate()">Generate Printable Table</button>
