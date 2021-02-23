@@ -54,10 +54,10 @@
                     generateTable(table, trekkers);
 
                     document.querySelector("#trekName").innerHTML = `${jsonTable[0].trek.name} (${jsonTable[0].trek.id})`;
-
                     document.querySelector("#startDate").innerHTML = jsonTable[0].start_date;
                     document.querySelector("#input").style.display = "none";
                     document.querySelector("#output").style.display = "block";
+                    
                 } catch (err) {
                     alert(err);
                 }
@@ -68,11 +68,12 @@
             Enter JSON data to generate printable table:
             <br />
             <textarea id="json" name="json" rows="4" cols="50" placeholder="Enter JSON data here to generate printable table"></textarea>
+            <br />
+            <br />
             <button onClick="generate()">Generate Printable Table</button>
         </div>
         <div id="output" style="display: none;">
             <br />
-
             <div id="outputTitle">
                 <b>Trek Name:</b><span id="trekName"></span>
                 <br />
@@ -81,7 +82,6 @@
             <br />
             <br />
             <table>
-                <!-- here goes our data! -->
             </table>
         </div>
     </body>
