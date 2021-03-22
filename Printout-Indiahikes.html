@@ -2,98 +2,158 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Generate table from JSON</title>
-        
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-JQKB9YJF9L"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+  <head>
+    <meta charset="UTF-8" />
+    <title>Generate table from JSON</title>
 
-          gtag('config', 'G-JQKB9YJF9L');
-        </script>
-        
-    </head>
+    <script
+      async=""
+      src="https://www.googletagmanager.com/gtag/js?id=G-JQKB9YJF9L"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
 
-    <body>
-        <script>
-            // Script Source: https://github.com/gurumukhi/TrekVitals-Scripts/Indiahikes.html
-            const generate = () => {
-                try {
-                    const jsonTableStr = document.querySelector("#json").value.trim();
-                    // remove "batchJson=" if required below
-                    const jsonTable = JSON.parse(jsonTableStr.substr("".length, jsonTableStr.length));
-                    const trekkers = jsonTable[0].trekkers.map((a, index) => ({
-                        SrNo: index + 1,
-                        TrekkerName: a.name,
-                        City: a.city,
-                        Phone: a.phone_number,
-                    }));
+      gtag("config", "G-JQKB9YJF9L");
+    </script>
+  </head>
 
-                    function generateTableHead(table, data) {
-                        table.style.borderCollapse = "collapse";
-                        table.style.borderSpacing = "0";
-                        let thead = table.createTHead();
-                        let row = thead.insertRow();
-                        for (let key of data) {
-                            let th = document.createElement("th");
-                            let text = document.createTextNode(key);
-                            th.appendChild(text);
-                            row.appendChild(th);
-                        }
-                    }
+  <body>
+    <script>
+      // Script Source: https://github.com/gurumukhi/TrekVitals-Scripts/Indiahikes.html
+      const processContent = () => {
+        try {
+          const jsonTableStr = document.querySelector("#json").value.trim();
+          // remove "batchJson=" if required below
+          const jsonTable = JSON.parse(
+            jsonTableStr.substr("".length, jsonTableStr.length)
+          );
+          generate(jsonTable);
+        } catch (err) {
+          alert(err);
+        }
+      };
 
-                    function generateTable(table, data) {
-                        for (let element of data) {
-                            let row = table.insertRow();
-                            for (key in element) {
-                                let cell = row.insertCell();
-                                let text = document.createTextNode(element[key]);
-                                cell.appendChild(text);
-                                cell.style.border = "1px solid gray";
-                                cell.style.padding = "10px";
-                                cell.style.margin = "0px";
-                            }
-                        }
-                    }
+      const processFile = (fileContent) => {
+        try {
+          const jsonTable = JSON.parse(fileContent);
+          generate(jsonTable);
+        } catch (err) {
+          alert(err);
+        }
+      };
 
-                    let table = document.querySelector("table");
-                    let data = Object.keys(trekkers[0]);
-                    generateTableHead(table, data);
-                    generateTable(table, trekkers);
+      const generate = (jsonTable) => {
+        console.log("processing json content now");
+        try {
+          const trekkers = jsonTable[0].trekkers.map((a, index) => ({
+            SrNo: index + 1,
+            TrekkerName: a.name,
+            City: a.city,
+            Phone: a.phone_number,
+          }));
 
-                    document.querySelector("#trekName").innerHTML = `${jsonTable[0].trek.name}`;
-                    document.querySelector("#startDate").innerHTML = jsonTable[0].start_date;
-                    document.querySelector("#input").style.display = "none";
-                    document.querySelector("#output").style.display = "block";
-                    
-                } catch (err) {
-                    alert(err);
-                }
-            };
-        </script>
+          function generateTableHead(table, data) {
+            table.style.borderCollapse = "collapse";
+            table.style.borderSpacing = "0";
+            let thead = table.createTHead();
+            let row = thead.insertRow();
+            for (let key of data) {
+              let th = document.createElement("th");
+              let text = document.createTextNode(key);
+              th.appendChild(text);
+              row.appendChild(th);
+            }
+          }
 
-        <div id="input">
-            Enter JSON data to generate printable table:
-            <br />
-            <textarea id="json" name="json" rows="4" cols="50" placeholder="Enter JSON data here to generate printable table.."></textarea>
-            <br />
-            <br />
-            <button onClick="generate()">Generate Printable Table</button>
-        </div>
-        <div id="output" style="display: none;">
-            <br />
-            <div id="outputTitle">
-                <b>Trek Name:</b><span id="trekName"></span>
-                <br />
-                <b>Date: </b><span id="startDate"></span>
-            </div>
-            <br />
-            <br />
-            <table>
-            </table>
-        </div>
-    </body>
+          function generateTable(table, data) {
+            for (let element of data) {
+              let row = table.insertRow();
+              for (key in element) {
+                let cell = row.insertCell();
+                let text = document.createTextNode(element[key]);
+                cell.appendChild(text);
+                cell.style.border = "1px solid gray";
+                cell.style.padding = "10px";
+                cell.style.margin = "0px";
+              }
+            }
+          }
+
+          let table = document.querySelector("table");
+          let data = Object.keys(trekkers[0]);
+          generateTableHead(table, data);
+          generateTable(table, trekkers);
+
+          document.querySelector(
+            "#trekName"
+          ).innerHTML = `${jsonTable[0].trek.name}`;
+          document.querySelector("#startDate").innerHTML =
+            jsonTable[0].start_date;
+          document.querySelector("#input").style.display = "none";
+          document.querySelector("#output").style.display = "block";
+        } catch (err) {
+          alert(err);
+        }
+      };
+    </script>
+
+    <div id="input">
+      Select file or Enter JSON data to generate printable table:
+      <br /><br />
+      <input type="file" id="file-selector" />
+
+      <br /><br />
+      <textarea
+        id="json"
+        name="json"
+        rows="4"
+        cols="50"
+        placeholder="Select file above, or enter JSON data here to generate printable table.."
+      ></textarea>
+      <br />
+      <br />
+      <button onclick="processContent()">Generate Printable Table</button>
+    </div>
+
+    <script>
+      const fileSelector = document.getElementById("file-selector");
+
+      fileSelector.addEventListener("change", (event) => {
+        const fileList = event.target.files;
+        // console.log(fileList[0]);
+
+        file = fileList[0];
+
+        let reader = new FileReader();
+
+        reader.readAsText(file);
+
+        reader.onload = function () {
+          //   console.log(reader.result);
+          processFile(reader.result);
+        };
+
+        reader.onerror = function () {
+          alert(reader.error);
+          console.log(reader.error);
+        };
+      });
+    </script>
+
+    <div id="output" style="display: none;">
+      <br />
+      <div id="outputTitle">
+        <b>Trek Name:</b><span id="trekName"></span>
+        <br />
+        <b>Date: </b><span id="startDate"></span>
+      </div>
+      <br />
+      <br />
+      <table></table>
+    </div>
+  </body>
 </html>
